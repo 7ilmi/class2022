@@ -4,6 +4,7 @@ const path = require("path");
 const bodyParser = require("body-parser")
 const mysql = require("mysql")
 
+
 // Set up Express.js
 const app = express();
 
@@ -18,7 +19,7 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
 // Misc. site configuration
-const brand = "Travel Experts 2.0";
+const brand = "Travel Experts";
 
 // Initialize server variables
 const port = 8000;
@@ -37,6 +38,7 @@ function startServer(_port) {
 
 // Render the main index view template
 app.get(["/", "/index"], (req, res) => {
+
 
     // Define SQL statement(s)
     var packageSQL =
@@ -60,7 +62,22 @@ app.get(["/", "/index"], (req, res) => {
         });
     });
 })
+// render agencies view template from db    
+app.get("/agencies", (req, res) => {
+    var agenciesSQL =
+    "SELECT * " + 
+    "FROM agencies";
+    con.query(agenciesSQL, (err, result) => {
+        if (err) throw err;
+        console.log(result)
+        res.render("agencies", {
+            _title: "Agencies",
+            _brand: brand,
+            result: result
+        })
+    })
 
+})
 // Render contact view template
 app.get("/contact", (req, res) => {
 
